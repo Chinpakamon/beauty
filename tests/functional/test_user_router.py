@@ -192,6 +192,27 @@ def test_update_user_permission_denied(
     assert response.json() == error_response
 
 
+def test_update_user_success(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    success_response = load_mock("success", "update_user.json")
+    current_user = SimpleNamespace(id=1, role=SimpleNamespace(value="ADMIN"))
+    client.app.dependency_overrides[get_current_user_dep] = lambda: current_user
+    monkeypatch.setattr(
+        UserService,
+        "update_user",
+        AsyncMock(return_value=schemas.UpdateUserResponseSchemas(**success_response)),
+    )
+
+    response = client.post(
+        "/user/update/2",
+        json={"first_name": "Updated", "phone_number": "+79991112233"},
+    )
+
+    assert response.status_code == 200
+    assert response.json() == success_response
+
+
 def test_delete_user_permission_denied(
     client: TestClient, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -208,6 +229,42 @@ def test_delete_user_permission_denied(
 
     assert response.status_code == 403
     assert response.json() == error_response
+
+
+def test_delete_user_success(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    success_response = load_mock("success", "delete_user.json")
+    current_user = SimpleNamespace(id=1, role=SimpleNamespace(value="ADMIN"))
+    client.app.dependency_overrides[get_current_user_dep] = lambda: current_user
+    monkeypatch.setattr(
+        UserService,
+        "delete_user",
+        AsyncMock(return_value=schemas.DeleteUserResponseSchemas(**success_response)),
+    )
+
+    response = client.post("/user/delete/2")
+
+    assert response.status_code == 200
+    assert response.json() == success_response
+
+
+def test_user_list_success(client: TestClient, monkeypatch: pytest.MonkeyPatch) -> None:
+    success_response = load_mock("success", "list_user.json")
+    monkeypatch.setattr(
+        UserService,
+        "get_user_list",
+        AsyncMock(return_value=schemas.ListUserResponseSchemas(**success_response)),
+    )
+
+    response = client.request(
+        "GET",
+        "/user/list",
+        json={"filters": {"role": "USER"}, "limit": 10, "offset": 0},
+    )
+
+    assert response.status_code == 200
+    assert response.json() == success_response
 
 
 def test_change_password_old_password_invalid(

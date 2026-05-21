@@ -1,0 +1,23 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "email": "admin@example.com",
+            "first_name": "Admin",
+            "last_name": "User",
+            "role": "ADMIN",
+            "phone_number": "+79990000001"
+        },
+        {
+            "id": 2,
+            "email": "user@example.com",
+            "first_name": "John",
+            "last_name": "Doe",
+            "role": "USER",
+            "phone_number": "+79990000002"
+        }
+    ],
+    "total": 2,
+    "limit": 10,
+    "offset": 0
+}
