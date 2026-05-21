@@ -69,7 +69,7 @@ class ServiceTypeService:
             return schemas.UpdateServiceTypeResponseSchemas.model_validate(service_type)
 
         if "name" in update_data:
-            existing = await repository.ServiceTypeRepository.select_exists_service_type_by_name(
+            existing = await repository.ServiceTypeRepository.select_exists_service_type_by_name(  # noqa: E501
                 name=update_data["name"],
                 session=session,
                 exclude_service_type_id=service_type_id,

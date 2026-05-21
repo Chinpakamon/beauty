@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import jwt
 
@@ -6,9 +6,7 @@ from app.core.settings import settings
 
 
 def create_access_token(data: dict) -> str:
-    expire = datetime.now(timezone.utc) + timedelta(
-        hours=settings.access_token_expire_hours
-    )
+    expire = datetime.now(UTC) + timedelta(hours=settings.access_token_expire_hours)
     payload = {**data, "exp": expire}
     return jwt.encode(
         payload=payload, key=settings.jwt_secret, algorithm=settings.jwt_algorithm

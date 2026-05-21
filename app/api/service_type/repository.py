@@ -131,11 +131,12 @@ class ServiceTypeRepository:
         query: sqlalchemy.Select,
         order_by: consts.ServiceTypeOrderByType | None,
     ) -> sqlalchemy.Select:
+        service_type_order = consts.ServiceTypeOrderByType
         order_mapping = {
-            consts.ServiceTypeOrderByType.CREATED_AT_ASC: models.ServiceType.created_at.asc(),
-            consts.ServiceTypeOrderByType.CREATED_AT_DESC: models.ServiceType.created_at.desc(),
-            consts.ServiceTypeOrderByType.NAME_ASC: models.ServiceType.name.asc(),
-            consts.ServiceTypeOrderByType.NAME_DESC: models.ServiceType.name.desc(),
+            service_type_order.CREATED_AT_ASC: models.ServiceType.created_at.asc(),
+            service_type_order.CREATED_AT_DESC: models.ServiceType.created_at.desc(),
+            service_type_order.NAME_ASC: models.ServiceType.name.asc(),
+            service_type_order.NAME_DESC: models.ServiceType.name.desc(),
         }
 
         return query.order_by(

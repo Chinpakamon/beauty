@@ -21,7 +21,8 @@ class PermissionDeniedException(fastapi.HTTPException):
     def __init__(self):
         super().__init__(
             status_code=fastapi.status.HTTP_403_FORBIDDEN,
-            detail="You do not have sufficient permissions/rights to perform this operation",
+            detail="You do not have sufficient permissions/rights "
+            "to perform this operation",
         )
 
 

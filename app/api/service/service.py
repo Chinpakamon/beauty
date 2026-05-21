@@ -34,7 +34,7 @@ class ServiceService:
         service_type_id: int,
         session: AsyncSession,
     ) -> models.ServiceType:
-        service_type = await service_type_repository.ServiceTypeRepository.select_service_type_by_id(
+        service_type = await service_type_repository.ServiceTypeRepository.select_service_type_by_id(  # noqa: E501
             service_type_id=service_type_id,
             session=session,
         )

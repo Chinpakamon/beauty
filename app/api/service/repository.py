@@ -140,13 +140,14 @@ class ServiceRepository:
         query: sqlalchemy.Select,
         order_by: consts.ServiceOrderByType | None,
     ) -> sqlalchemy.Select:
+        service_order = consts.ServiceOrderByType
         order_mapping = {
-            consts.ServiceOrderByType.CREATED_AT_ASC: models.Service.created_at.asc(),
-            consts.ServiceOrderByType.CREATED_AT_DESC: models.Service.created_at.desc(),
-            consts.ServiceOrderByType.PRICE_ASC: models.Service.price.asc(),
-            consts.ServiceOrderByType.PRICE_DESC: models.Service.price.desc(),
-            consts.ServiceOrderByType.DURATION_ASC: models.Service.duration_minutes.asc(),
-            consts.ServiceOrderByType.DURATION_DESC: models.Service.duration_minutes.desc(),
+            service_order.CREATED_AT_ASC: models.Service.created_at.asc(),
+            service_order.CREATED_AT_DESC: models.Service.created_at.desc(),
+            service_order.PRICE_ASC: models.Service.price.asc(),
+            service_order.PRICE_DESC: models.Service.price.desc(),
+            service_order.DURATION_ASC: models.Service.duration_minutes.asc(),
+            service_order.DURATION_DESC: models.Service.duration_minutes.desc(),
         }
 
         return query.order_by(
