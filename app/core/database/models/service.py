@@ -7,6 +7,13 @@ from app.core.database import mixins
 
 class Service(database.Base, mixins.PrimaryKeyMixin, mixins.TimestampMixin):
     __tablename__ = "services"
+    __table_args__ = (
+        sqlalchemy.UniqueConstraint(
+            "master_id",
+            "service_type_id",
+            name="uq_services_master_id_service_type_id",
+        ),
+    )
 
     service_type_id: orm.Mapped[int] = orm.mapped_column(
         sqlalchemy.ForeignKey("service_types.id"),

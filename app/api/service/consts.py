@@ -1,0 +1,10 @@
+import enum
+
+
+class ServiceOrderByType(enum.StrEnum):
+    CREATED_AT_ASC = "CREATED_AT_ASC"
+    CREATED_AT_DESC = "CREATED_AT_DESC"
+    PRICE_ASC = "PRICE_ASC"
+    PRICE_DESC = "PRICE_DESC"
+    DURATION_ASC = "DURATION_ASC"
+    DURATION_DESC = "DURATION_DESC"

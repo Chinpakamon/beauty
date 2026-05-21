@@ -16,3 +16,12 @@ def require_admin(request: Request):
             status_code=403, detail="The user does not have the required rights"
         )
     return user
+
+
+def require_master_or_admin(request: Request):
+    user = request.state.current_user
+    if not user or user.role.value not in {"MASTER", "ADMIN"}:
+        raise HTTPException(
+            status_code=403, detail="The user does not have the required rights"
+        )
+    return user
