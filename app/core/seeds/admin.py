@@ -1,9 +1,10 @@
 import sqlalchemy
 
 from app.api.user import consts
-from app.core.security import hash_password
 from app.core.database import models
+from app.core.security import hash_password
 from app.core.settings import settings
+
 
 async def create_dev_admin(session):
     result = await session.execute(

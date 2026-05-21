@@ -21,7 +21,6 @@ class ServiceRepository:
         query = sqlalchemy.select(models.Service).where(models.Service.id == service_id)
         return await session.scalar(query)
 
-
     @staticmethod
     async def select_exists_service_by_master_and_type(
         master_id: int,
@@ -37,10 +36,11 @@ class ServiceRepository:
         if exclude_service_id is not None:
             conditions.append(models.Service.id != exclude_service_id)
 
-        query = sqlalchemy.select(sqlalchemy.exists().where(sqlalchemy.and_(*conditions)))
+        query = sqlalchemy.select(
+            sqlalchemy.exists().where(sqlalchemy.and_(*conditions))
+        )
         result = await session.execute(query)
         return result.scalar()
-
 
     @staticmethod
     async def insert_service(
@@ -73,7 +73,6 @@ class ServiceRepository:
             await session.rollback()
             logger.error("Database error occurred", exc_info=e)
             raise global_exceptions.DatabaseException("Database error")
-
 
     @staticmethod
     async def update_service(
@@ -109,7 +108,6 @@ class ServiceRepository:
             logger.error("Database error occurred", exc_info=e)
             raise global_exceptions.DatabaseException("Database error")
 
-
     @staticmethod
     def service_list_filter(
         query: sqlalchemy.Select,
@@ -137,7 +135,6 @@ class ServiceRepository:
 
         return query
 
-
     @staticmethod
     def service_list_order_by(
         query: sqlalchemy.Select,
@@ -152,8 +149,9 @@ class ServiceRepository:
             consts.ServiceOrderByType.DURATION_DESC: models.Service.duration_minutes.desc(),
         }
 
-        return query.order_by(order_mapping.get(order_by, models.Service.created_at.desc()))
-
+        return query.order_by(
+            order_mapping.get(order_by, models.Service.created_at.desc())
+        )
 
     @staticmethod
     async def select_list_service(
@@ -172,11 +170,15 @@ class ServiceRepository:
 
         query = ServiceRepository.service_list_filter(query=query, data=data)
 
-        count_query = sqlalchemy.select(sqlalchemy.func.count()).select_from(query.subquery())
+        count_query = sqlalchemy.select(sqlalchemy.func.count()).select_from(
+            query.subquery()
+        )
         count_result = await session.execute(count_query)
         total = count_result.scalar_one()
 
-        query = ServiceRepository.service_list_order_by(query=query, order_by=data.order_by)
+        query = ServiceRepository.service_list_order_by(
+            query=query, order_by=data.order_by
+        )
         query = query.limit(data.limit).offset(data.offset)
 
         try:

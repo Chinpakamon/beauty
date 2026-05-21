@@ -22,9 +22,8 @@ class Settings(pydantic_settings.BaseSettings):
     admin_last_name: str
 
     model_config = pydantic.ConfigDict(
-            env_file=".env",
-            extra="ignore",
-            env_file_encoding="utf-8"
-        )
+        env_file=".env", extra="ignore", env_file_encoding="utf-8"
+    )
+
 
 settings = Settings()

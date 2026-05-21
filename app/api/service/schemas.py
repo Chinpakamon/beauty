@@ -61,7 +61,9 @@ class ListServiceFilters(pydantic.BaseModel):
 
 class ListServiceRequestSchemas(pydantic.BaseModel):
     filters: ListServiceFilters | None = None
-    order_by: consts.ServiceOrderByType | None = consts.ServiceOrderByType.CREATED_AT_DESC
+    order_by: consts.ServiceOrderByType | None = (
+        consts.ServiceOrderByType.CREATED_AT_DESC
+    )
     limit: int = pydantic.Field(default=10, ge=1, le=100)
     offset: int = pydantic.Field(default=0, ge=0)
 

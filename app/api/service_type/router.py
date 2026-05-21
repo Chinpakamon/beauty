@@ -20,7 +20,9 @@ async def create_service_type(
     )
 
 
-@router.get("/{service_type_id:int}", response_model=schemas.GetServiceTypeResponseSchemas)
+@router.get(
+    "/{service_type_id:int}", response_model=schemas.GetServiceTypeResponseSchemas
+)
 async def get_service_type(
     service_type_id: int,
     session: AsyncSession = Depends(get_session),
@@ -31,7 +33,10 @@ async def get_service_type(
     )
 
 
-@router.patch("/update/{service_type_id:int}", response_model=schemas.UpdateServiceTypeResponseSchemas)
+@router.patch(
+    "/update/{service_type_id:int}",
+    response_model=schemas.UpdateServiceTypeResponseSchemas,
+)
 async def update_service_type(
     service_type_id: int,
     data: schemas.UpdateServiceTypeRequestSchemas,

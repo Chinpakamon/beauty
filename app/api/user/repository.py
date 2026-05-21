@@ -1,3 +1,4 @@
+import logging
 import typing
 
 import sqlalchemy
@@ -8,33 +9,34 @@ from app.api.globals import exceptions as global_exceptions
 from app.api.user import consts, schemas
 from app.core.database import models
 
-import logging
-
 logger = logging.getLogger(__name__)
 
 
 class UserRepository:
 
     @staticmethod
-    async def select_exists_user_by_email(email: str, session: AsyncSession,) -> bool:
-        query = sqlalchemy.select(sqlalchemy.exists().where(
-            sqlalchemy.and_(models.User.email == email, models.User.is_active.is_(True))
+    async def select_exists_user_by_email(
+        email: str,
+        session: AsyncSession,
+    ) -> bool:
+        query = sqlalchemy.select(
+            sqlalchemy.exists().where(
+                sqlalchemy.and_(
+                    models.User.email == email, models.User.is_active.is_(True)
+                )
             )
         )
         result = await session.execute(query)
         return result.scalar()
 
-
     @staticmethod
-    async def insert_user(data: dict, session: AsyncSession) -> sqlalchemy.RowMapping | None:
+    async def insert_user(
+        data: dict, session: AsyncSession
+    ) -> sqlalchemy.RowMapping | None:
         query = (
             sqlalchemy.insert(models.User)
             .values(**data)
-            .returning(
-                models.User.id,
-                models.User.email,
-                models.User.role
-            )
+            .returning(models.User.id, models.User.email, models.User.role)
         )
 
         try:
@@ -49,7 +51,6 @@ class UserRepository:
             await session.rollback()
             logger.error("Database error occurred", exc_info=e)
             raise global_exceptions.DatabaseException("Database error")
-
 
     @staticmethod
     async def select_user_by_email(
@@ -60,7 +61,6 @@ class UserRepository:
         )
         return await session.scalar(query)
 
-
     @staticmethod
     async def select_user_by_id(
         user_id: int, session: AsyncSession
@@ -70,12 +70,17 @@ class UserRepository:
         )
         return await session.scalar(query)
 
-
     @staticmethod
-    async def update_user(user_id: int, data: dict, session: AsyncSession) -> sqlalchemy.RowMapping | None:
+    async def update_user(
+        user_id: int, data: dict, session: AsyncSession
+    ) -> sqlalchemy.RowMapping | None:
         query = (
             sqlalchemy.update(models.User)
-            .where(sqlalchemy.and_(models.User.id == user_id, models.User.is_active.is_(True)))
+            .where(
+                sqlalchemy.and_(
+                    models.User.id == user_id, models.User.is_active.is_(True)
+                )
+            )
             .values(**data)
             .returning(
                 models.User.id,
@@ -83,7 +88,7 @@ class UserRepository:
                 models.User.first_name,
                 models.User.last_name,
                 models.User.role,
-                models.User.phone_number
+                models.User.phone_number,
             )
         )
 
@@ -100,12 +105,15 @@ class UserRepository:
             logger.error("Database error occurred", exc_info=e)
             raise global_exceptions.DatabaseException("Database error")
 
-
     @staticmethod
     async def delete_user(user_id: int, session: AsyncSession) -> None:
         query = (
             sqlalchemy.update(models.User)
-            .where(sqlalchemy.and_(models.User.id == user_id, models.User.is_active.is_(True)))
+            .where(
+                sqlalchemy.and_(
+                    models.User.id == user_id, models.User.is_active.is_(True)
+                )
+            )
             .values(is_active=False)
         )
 
@@ -120,7 +128,6 @@ class UserRepository:
             await session.rollback()
             logger.error("Database error occurred", exc_info=e)
             raise global_exceptions.DatabaseException("Database error")
-
 
     @staticmethod
     def user_list_filter(
@@ -149,7 +156,6 @@ class UserRepository:
             query = query.where(models.User.role == f.role)
 
         return query
-    
 
     @staticmethod
     def user_list_order_by(
@@ -172,28 +178,25 @@ class UserRepository:
             order_mapping.get(order_by, models.User.created_at.desc())
         )
 
-
     @staticmethod
     async def select_list_user(
-        data: schemas.ListUserRequestSchemas,
-        session: AsyncSession
+        data: schemas.ListUserRequestSchemas, session: AsyncSession
     ) -> tuple[typing.Sequence[sqlalchemy.RowMapping], int]:
 
-        query = (
-            sqlalchemy.select(
-                models.User.id,
-                models.User.email,
-                models.User.first_name,
-                models.User.last_name,
-                models.User.role,
-                models.User.phone_number
-            )
-            .where(models.User.is_active.is_(True))
-        )
+        query = sqlalchemy.select(
+            models.User.id,
+            models.User.email,
+            models.User.first_name,
+            models.User.last_name,
+            models.User.role,
+            models.User.phone_number,
+        ).where(models.User.is_active.is_(True))
 
         query = UserRepository.user_list_filter(query=query, data=data)
 
-        count_query = sqlalchemy.select(sqlalchemy.func.count()).select_from(query.subquery())
+        count_query = sqlalchemy.select(sqlalchemy.func.count()).select_from(
+            query.subquery()
+        )
         count_result = await session.execute(count_query)
         total = count_result.scalar_one()
 
@@ -208,16 +211,17 @@ class UserRepository:
             logger.error("Database error occurred", exc_info=e)
             raise global_exceptions.DatabaseException("Database error")
 
-
     @staticmethod
     async def update_password(
-        user: models.User,
-        new_password_hash: str,
-        session: AsyncSession
+        user: models.User, new_password_hash: str, session: AsyncSession
     ) -> None:
         query = (
             sqlalchemy.update(models.User)
-            .where(sqlalchemy.and_(models.User.id == user.id, models.User.is_active.is_(True)))
+            .where(
+                sqlalchemy.and_(
+                    models.User.id == user.id, models.User.is_active.is_(True)
+                )
+            )
             .values(password_hash=new_password_hash)
         )
 
@@ -233,16 +237,17 @@ class UserRepository:
             logger.error("Database error occurred", exc_info=e)
             raise global_exceptions.DatabaseException("Database error")
 
-
     @staticmethod
     async def update_email(
-        user: models.User,
-        new_email: str,
-        session: AsyncSession
+        user: models.User, new_email: str, session: AsyncSession
     ) -> None:
         query = (
             sqlalchemy.update(models.User)
-            .where(sqlalchemy.and_(models.User.id == user.id, models.User.is_active.is_(True)))
+            .where(
+                sqlalchemy.and_(
+                    models.User.id == user.id, models.User.is_active.is_(True)
+                )
+            )
             .values(email=new_email)
         )
 
@@ -258,16 +263,15 @@ class UserRepository:
             logger.error("Database error occurred", exc_info=e)
             raise global_exceptions.DatabaseException("Database error")
 
-
     @staticmethod
-    async def update_role(
-        user_id: int,
-        new_role: str,
-        session: AsyncSession
-    ) -> None:
+    async def update_role(user_id: int, new_role: str, session: AsyncSession) -> None:
         query = (
             sqlalchemy.update(models.User)
-            .where(sqlalchemy.and_(models.User.id == user_id, models.User.is_active.is_(True)))
+            .where(
+                sqlalchemy.and_(
+                    models.User.id == user_id, models.User.is_active.is_(True)
+                )
+            )
             .values(role=new_role)
         )
 

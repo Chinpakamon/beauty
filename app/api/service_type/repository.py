@@ -23,7 +23,6 @@ class ServiceTypeRepository:
         )
         return await session.scalar(query)
 
-
     @staticmethod
     async def select_exists_service_type_by_name(
         name: str,
@@ -48,7 +47,6 @@ class ServiceTypeRepository:
 
         result = await session.execute(query)
         return result.scalar()
-
 
     @staticmethod
     async def insert_service_type(
@@ -78,7 +76,6 @@ class ServiceTypeRepository:
             await session.rollback()
             logger.error("Database error occurred", exc_info=e)
             raise global_exceptions.DatabaseException("Database error")
-
 
     @staticmethod
     async def update_service_type(
@@ -111,7 +108,6 @@ class ServiceTypeRepository:
             logger.error("Database error occurred", exc_info=e)
             raise global_exceptions.DatabaseException("Database error")
 
-
     @staticmethod
     def service_type_list_filter(
         query: sqlalchemy.Select,
@@ -130,7 +126,6 @@ class ServiceTypeRepository:
 
         return query
 
-
     @staticmethod
     def service_type_list_order_by(
         query: sqlalchemy.Select,
@@ -147,7 +142,6 @@ class ServiceTypeRepository:
             order_mapping.get(order_by, models.ServiceType.created_at.desc())
         )
 
-
     @staticmethod
     async def select_list_service_type(
         data: schemas.ListServiceTypeRequestSchemas,
@@ -162,7 +156,9 @@ class ServiceTypeRepository:
 
         query = ServiceTypeRepository.service_type_list_filter(query=query, data=data)
 
-        count_query = sqlalchemy.select(sqlalchemy.func.count()).select_from(query.subquery())
+        count_query = sqlalchemy.select(sqlalchemy.func.count()).select_from(
+            query.subquery()
+        )
         count_result = await session.execute(count_query)
         total = count_result.scalar_one()
 

@@ -32,7 +32,9 @@ async def get_service(
     )
 
 
-@router.patch("/update/{service_id:int}", response_model=schemas.UpdateServiceResponseSchemas)
+@router.patch(
+    "/update/{service_id:int}", response_model=schemas.UpdateServiceResponseSchemas
+)
 async def update_service(
     service_id: int,
     data: schemas.UpdateServiceRequestSchemas,
@@ -65,7 +67,9 @@ async def change_service_status(
     )
 
 
-@router.delete("/delete/{service_id:int}", response_model=schemas.DeleteServiceResponseSchemas)
+@router.delete(
+    "/delete/{service_id:int}", response_model=schemas.DeleteServiceResponseSchemas
+)
 async def delete_service(
     service_id: int,
     session: AsyncSession = Depends(get_session),

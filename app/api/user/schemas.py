@@ -16,7 +16,7 @@ class RegistrationUserRequestSchemas(pydantic.BaseModel):
     @classmethod
     def validate_phone_number_field(cls, value: str | None) -> str | None:
         return validators.validate_phone_number(value)
-    
+
     @pydantic.field_validator("password")
     @classmethod
     def validate_password_field(cls, value: str) -> str:

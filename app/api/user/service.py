@@ -1,4 +1,5 @@
 import asyncio
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.globals import exceptions as global_exceptions
@@ -11,14 +12,15 @@ from app.core.database.models.user import RoleType
 class UserService:
 
     @staticmethod
-    async def _get_active_user_or_raise(user_id: int, session: AsyncSession) -> models.User:
+    async def _get_active_user_or_raise(
+        user_id: int, session: AsyncSession
+    ) -> models.User:
         user = await repository.UserRepository.select_user_by_id(
             user_id=user_id, session=session
         )
         if not user:
             raise global_exceptions.UserNotFoundException()
         return user
-
 
     @staticmethod
     async def registration_user(
@@ -36,25 +38,20 @@ class UserService:
             "first_name": data.first_name,
             "last_name": data.last_name,
             "role": data.role,
-            "phone_number": data.phone_number
+            "phone_number": data.phone_number,
         }
 
         user = await repository.UserRepository.insert_user(
             data=user_data, session=session
         )
         token = security.create_access_token(
-            data={
-                "user_id": str(user.id), 
-                "role": user.role.value,
-                "email": user.email
-            }
+            data={"user_id": str(user.id), "role": user.role.value, "email": user.email}
         )
         return schemas.RegistrationUserResponseSchemas(
             id=user["id"],
             email=user["email"],
             access_token=token,
         )
-
 
     @staticmethod
     async def login(
@@ -71,23 +68,21 @@ class UserService:
             raise exceptions.InvalidCredentialsException()
 
         token = security.create_access_token(
-            data={
-                "user_id": str(user.id), 
-                "role": user.role.value,
-                "email": user.email
-            }
+            data={"user_id": str(user.id), "role": user.role.value, "email": user.email}
         )
 
         return schemas.LoginUserResponseSchemas(access_token=token)
 
-
     @staticmethod
-    async def get_user(user_id: int, session: AsyncSession) -> schemas.GetUserResponseSchemas:
+    async def get_user(
+        user_id: int, session: AsyncSession
+    ) -> schemas.GetUserResponseSchemas:
 
-        user = await UserService._get_active_user_or_raise(user_id=user_id, session=session)
+        user = await UserService._get_active_user_or_raise(
+            user_id=user_id, session=session
+        )
 
         return schemas.GetUserResponseSchemas.model_validate(user)
-
 
     @staticmethod
     def has_permissions(current_user: models.User, target_user_id: int) -> bool:
@@ -95,48 +90,46 @@ class UserService:
             return True
         return current_user.id == target_user_id
 
-
     @staticmethod
     async def update_user(
-        user_id: int, 
+        user_id: int,
         current_user: models.User,
-        data: schemas.UpdateUserRequestSchemas, 
-        session: AsyncSession
+        data: schemas.UpdateUserRequestSchemas,
+        session: AsyncSession,
     ) -> schemas.UpdateUserResponseSchemas:
 
-        user = await UserService._get_active_user_or_raise(user_id=user_id, session=session)
-        
-        if not UserService.has_permissions(current_user=current_user, target_user_id=user.id):
+        user = await UserService._get_active_user_or_raise(
+            user_id=user_id, session=session
+        )
+
+        if not UserService.has_permissions(
+            current_user=current_user, target_user_id=user.id
+        ):
             raise exceptions.PermissionDeniedException()
 
         updated_user = await repository.UserRepository.update_user(
-            data=data.model_dump(exclude_unset=True),
-            session=session,
-            user_id=user_id
+            data=data.model_dump(exclude_unset=True), session=session, user_id=user_id
         )
 
         return schemas.UpdateUserResponseSchemas.model_validate(updated_user)
 
-
     @staticmethod
     async def delete_user(
-        user_id: int, 
-        current_user: models.User,
-        session: AsyncSession
+        user_id: int, current_user: models.User, session: AsyncSession
     ) -> schemas.DeleteUserResponseSchemas:
 
-        user = await UserService._get_active_user_or_raise(user_id=user_id, session=session)
-
-        if not UserService.has_permissions(current_user=current_user, target_user_id=user.id):
-            raise exceptions.PermissionDeniedException()
-
-        await repository.UserRepository.delete_user(
-            session=session,
-            user_id=user_id
+        user = await UserService._get_active_user_or_raise(
+            user_id=user_id, session=session
         )
 
-        return schemas.DeleteUserResponseSchemas(success=True)
+        if not UserService.has_permissions(
+            current_user=current_user, target_user_id=user.id
+        ):
+            raise exceptions.PermissionDeniedException()
 
+        await repository.UserRepository.delete_user(session=session, user_id=user_id)
+
+        return schemas.DeleteUserResponseSchemas(success=True)
 
     @staticmethod
     async def get_user_list(
@@ -144,7 +137,9 @@ class UserService:
         session: AsyncSession,
     ) -> schemas.ListUserResponseSchemas:
         print(data.filters)
-        users, total = await repository.UserRepository.select_list_user(data=data, session=session)
+        users, total = await repository.UserRepository.select_list_user(
+            data=data, session=session
+        )
 
         return schemas.ListUserResponseSchemas(
             data=[schemas.ListUserItemResponseSchemas(**user) for user in users],
@@ -152,7 +147,6 @@ class UserService:
             limit=data.limit,
             offset=data.offset,
         )
-
 
     @staticmethod
     async def change_password(
@@ -177,12 +171,11 @@ class UserService:
 
         return schemas.UpdateUserPasswordResponseSchemas(success=True)
 
-
     @staticmethod
     async def change_email(
         data: schemas.UpdateUserEmailRequestSchemas,
         current_user: models.User,
-        session: AsyncSession
+        session: AsyncSession,
     ) -> schemas.UpdateUserEmailResponseSchemas:
 
         if not security.verify_password(data.password, current_user.password_hash):
@@ -192,8 +185,7 @@ class UserService:
             raise exceptions.NewEmailMustBeDifferentException()
 
         existing_user = await repository.UserRepository.select_exists_user_by_email(
-            email=data.new_email, 
-            session=session
+            email=data.new_email, session=session
         )
 
         if existing_user:
@@ -206,7 +198,6 @@ class UserService:
         )
 
         return schemas.UpdateUserEmailResponseSchemas(success=True)
-
 
     @staticmethod
     async def change_role(

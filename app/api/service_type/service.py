@@ -19,15 +19,16 @@ class ServiceTypeService:
             raise exceptions.ServiceTypeNotFoundException()
         return service_type
 
-
     @staticmethod
     async def create_service_type(
         data: schemas.CreateServiceTypeRequestSchemas,
         session: AsyncSession,
     ) -> schemas.CreateServiceTypeResponseSchemas:
-        existing = await repository.ServiceTypeRepository.select_exists_service_type_by_name(
-            name=data.name,
-            session=session,
+        existing = (
+            await repository.ServiceTypeRepository.select_exists_service_type_by_name(
+                name=data.name,
+                session=session,
+            )
         )
         if existing:
             raise exceptions.ServiceTypeAlreadyExistsException()
@@ -38,7 +39,6 @@ class ServiceTypeService:
         )
 
         return schemas.CreateServiceTypeResponseSchemas(**service_type)
-
 
     @staticmethod
     async def get_service_type(
@@ -51,7 +51,6 @@ class ServiceTypeService:
         )
 
         return schemas.GetServiceTypeResponseSchemas.model_validate(service_type)
-
 
     @staticmethod
     async def update_service_type(
@@ -78,14 +77,15 @@ class ServiceTypeService:
             if existing:
                 raise exceptions.ServiceTypeAlreadyExistsException()
 
-        updated_service_type = await repository.ServiceTypeRepository.update_service_type(
-            service_type_id=service_type_id,
-            data=update_data,
-            session=session,
+        updated_service_type = (
+            await repository.ServiceTypeRepository.update_service_type(
+                service_type_id=service_type_id,
+                data=update_data,
+                session=session,
+            )
         )
 
         return schemas.UpdateServiceTypeResponseSchemas(**updated_service_type)
-
 
     @staticmethod
     async def change_service_type_status(
@@ -103,23 +103,26 @@ class ServiceTypeService:
                 raise exceptions.ServiceTypeAlreadyActiveException()
             raise exceptions.ServiceTypeAlreadyInactiveException()
 
-        updated_service_type = await repository.ServiceTypeRepository.update_service_type(
-            service_type_id=service_type_id,
-            data={"is_active": data.is_active},
-            session=session,
+        updated_service_type = (
+            await repository.ServiceTypeRepository.update_service_type(
+                service_type_id=service_type_id,
+                data={"is_active": data.is_active},
+                session=session,
+            )
         )
 
         return schemas.ChangeServiceTypeStatusResponseSchemas(**updated_service_type)
-
 
     @staticmethod
     async def get_service_type_list(
         data: schemas.ListServiceTypeRequestSchemas,
         session: AsyncSession,
     ) -> schemas.ListServiceTypeResponseSchemas:
-        service_types, total = await repository.ServiceTypeRepository.select_list_service_type(
-            data=data,
-            session=session,
+        service_types, total = (
+            await repository.ServiceTypeRepository.select_list_service_type(
+                data=data,
+                session=session,
+            )
         )
 
         return schemas.ListServiceTypeResponseSchemas(

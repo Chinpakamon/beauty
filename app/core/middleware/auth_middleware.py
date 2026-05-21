@@ -1,7 +1,8 @@
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from app.api.globals import exceptions as global_exceptions, repository as global_repository
+from app.api.globals import exceptions as global_exceptions
+from app.api.globals import repository as global_repository
 from app.core import security
 from app.core.database.core import SessionLocal
 

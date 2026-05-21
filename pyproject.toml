@@ -1,6 +1,7 @@
 [tool.poetry]
 name = "beauty"
 version = "0.1.0"
+package-mode = false
 description = ""
 authors = ["vladislav <zackieffv@yandex.ru>"]
 readme = "README.md"
@@ -20,6 +21,30 @@ passlib = {version = ">=1.7", extras = ["bcrypt"]}
 pyjwt = ">=2.8"
 email-validator = "^2.3.0"
 argon2-cffi = "^25.1.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=8.4.0,<9.0.0"
+pytest-asyncio = ">=1.2.0,<2.0.0"
+httpx = ">=0.28.0,<0.29.0"
+black = ">=26.0.0,<27.0.0"
+isort = ">=7.0.0,<8.0.0"
+ruff = ">=0.14.0,<0.15.0"
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

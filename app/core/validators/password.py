@@ -1,5 +1,6 @@
 import re
 
+
 def validate_password(value: str) -> str:
     if len(value) < 8:
         raise ValueError("The password must be at least 8 characters long")

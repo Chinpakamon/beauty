@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.globals import exceptions as global_exceptions, repository as global_repository
+from app.api.globals import exceptions as global_exceptions
+from app.api.globals import repository as global_repository
 from app.api.service import exceptions, repository, schemas
 from app.api.service_type import exceptions as service_type_exceptions
 from app.api.service_type import repository as service_type_repository
@@ -23,12 +24,10 @@ class ServiceService:
             raise exceptions.ServiceNotFoundException()
         return service
 
-
     @staticmethod
     def _ensure_service_active_or_raise(service: models.Service) -> None:
         if not service.is_active:
             raise exceptions.ServiceInactiveException()
-
 
     @staticmethod
     async def _get_active_service_type_or_raise(
@@ -45,7 +44,6 @@ class ServiceService:
             raise exceptions.InactiveServiceTypeException()
         return service_type
 
-
     @staticmethod
     async def _get_master_or_raise(
         master_id: int,
@@ -61,7 +59,6 @@ class ServiceService:
             raise exceptions.MasterOnlyException()
         return master
 
-
     @staticmethod
     def _ensure_service_owner_or_admin(
         current_user: models.User,
@@ -69,10 +66,12 @@ class ServiceService:
     ) -> None:
         if current_user.role == models.RoleType.ADMIN:
             return
-        if current_user.role == models.RoleType.MASTER and current_user.id == service.master_id:
+        if (
+            current_user.role == models.RoleType.MASTER
+            and current_user.id == service.master_id
+        ):
             return
         raise user_exceptions.PermissionDeniedException()
-
 
     @staticmethod
     def _resolve_master_id(
@@ -85,12 +84,14 @@ class ServiceService:
             return requested_master_id
 
         if current_user.role == models.RoleType.MASTER:
-            if requested_master_id is not None and requested_master_id != current_user.id:
+            if (
+                requested_master_id is not None
+                and requested_master_id != current_user.id
+            ):
                 raise user_exceptions.PermissionDeniedException()
             return current_user.id
 
         raise user_exceptions.PermissionDeniedException()
-
 
     @staticmethod
     async def _ensure_master_service_type_unique(
@@ -99,15 +100,16 @@ class ServiceService:
         session: AsyncSession,
         exclude_service_id: int | None = None,
     ) -> None:
-        existing = await repository.ServiceRepository.select_exists_service_by_master_and_type(
-            master_id=master_id,
-            service_type_id=service_type_id,
-            session=session,
-            exclude_service_id=exclude_service_id,
+        existing = (
+            await repository.ServiceRepository.select_exists_service_by_master_and_type(
+                master_id=master_id,
+                service_type_id=service_type_id,
+                session=session,
+                exclude_service_id=exclude_service_id,
+            )
         )
         if existing:
             raise exceptions.ServiceAlreadyExistsException()
-
 
     @staticmethod
     async def create_service(
@@ -139,7 +141,6 @@ class ServiceService:
         )
         return schemas.CreateServiceResponseSchemas(**service)
 
-
     @staticmethod
     async def get_service(
         service_id: int,
@@ -150,7 +151,6 @@ class ServiceService:
             session=session,
         )
         return schemas.GetServiceResponseSchemas.model_validate(service)
-
 
     @staticmethod
     async def update_service(
@@ -163,7 +163,9 @@ class ServiceService:
             service_id=service_id,
             session=session,
         )
-        ServiceService._ensure_service_owner_or_admin(current_user=current_user, service=service)
+        ServiceService._ensure_service_owner_or_admin(
+            current_user=current_user, service=service
+        )
         ServiceService._ensure_service_active_or_raise(service=service)
 
         update_data = data.model_dump(exclude_unset=True)
@@ -171,12 +173,16 @@ class ServiceService:
             return schemas.UpdateServiceResponseSchemas.model_validate(service)
 
         target_master_id = update_data.get("master_id", service.master_id)
-        target_service_type_id = update_data.get("service_type_id", service.service_type_id)
+        target_service_type_id = update_data.get(
+            "service_type_id", service.service_type_id
+        )
 
         if "master_id" in update_data:
             if current_user.role != models.RoleType.ADMIN:
                 raise user_exceptions.PermissionDeniedException()
-            await ServiceService._get_master_or_raise(master_id=target_master_id, session=session)
+            await ServiceService._get_master_or_raise(
+                master_id=target_master_id, session=session
+            )
 
         if "service_type_id" in update_data:
             await ServiceService._get_active_service_type_or_raise(
@@ -198,7 +204,6 @@ class ServiceService:
         )
         return schemas.UpdateServiceResponseSchemas(**updated_service)
 
-
     @staticmethod
     async def change_service_status(
         service_id: int,
@@ -210,7 +215,9 @@ class ServiceService:
             service_id=service_id,
             session=session,
         )
-        ServiceService._ensure_service_owner_or_admin(current_user=current_user, service=service)
+        ServiceService._ensure_service_owner_or_admin(
+            current_user=current_user, service=service
+        )
 
         if service.is_active is data.is_active:
             if data.is_active:
@@ -224,7 +231,6 @@ class ServiceService:
         )
         return schemas.ChangeServiceStatusResponseSchemas(**updated_service)
 
-
     @staticmethod
     async def delete_service(
         service_id: int,
@@ -235,7 +241,9 @@ class ServiceService:
             service_id=service_id,
             session=session,
         )
-        ServiceService._ensure_service_owner_or_admin(current_user=current_user, service=service)
+        ServiceService._ensure_service_owner_or_admin(
+            current_user=current_user, service=service
+        )
         ServiceService._ensure_service_active_or_raise(service=service)
 
         if service.is_active:
@@ -247,7 +255,6 @@ class ServiceService:
 
         return schemas.DeleteServiceResponseSchemas(success=True)
 
-
     @staticmethod
     async def get_service_list(
         data: schemas.ListServiceRequestSchemas,
@@ -258,7 +265,10 @@ class ServiceService:
             session=session,
         )
         return schemas.ListServiceResponseSchemas(
-            data=[schemas.ListServiceItemResponseSchemas(**service) for service in services],
+            data=[
+                schemas.ListServiceItemResponseSchemas(**service)
+                for service in services
+            ],
             total=total,
             limit=data.limit,
             offset=data.offset,

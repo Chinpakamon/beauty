@@ -6,9 +6,11 @@ class Role(enum.StrEnum):
     MASTER = "MASTER"
     ADMIN = "ADMIN"
 
+
 class RegistrationRole(enum.StrEnum):
     USER = "USER"
     MASTER = "MASTER"
+
 
 class UserOrderByType(enum.StrEnum):
     CREATED_AT_ASC = "CREATED_AT_ASC"
