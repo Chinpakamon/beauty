@@ -4,9 +4,10 @@ from app.api.globals.exceptions import UnauthorizedException
 
 
 def get_current_user_dep(request: Request):
-    if not request.state.current_user:
+    current_user = getattr(request.state, "current_user", None)
+    if current_user is None:
         raise UnauthorizedException()
-    return request.state.current_user
+    return current_user
 
 
 def require_admin(request: Request):
