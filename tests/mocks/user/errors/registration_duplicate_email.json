@@ -1,4 +1,4 @@
 {
   "status_code": 409,
-  "detail": "User already exists"
+  "detail": "User with this email already exists"
 }
