@@ -143,9 +143,9 @@ def assert_validation_error_response(
     assert body["detail"], body
 
     if expected_field:
-        assert any(expected_field in item.get("loc", []) for item in body["detail"]), (
-            f"Expected validation error for field '{expected_field}'. Body: {body}"
-        )
+        assert any(
+            expected_field in item.get("loc", []) for item in body["detail"]
+        ), f"Expected validation error for field '{expected_field}'. Body: {body}"
 
 
 @pytest.mark.asyncio
