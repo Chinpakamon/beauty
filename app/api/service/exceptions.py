@@ -33,6 +33,14 @@ class ServiceAlreadyInactiveException(fastapi.HTTPException):
         )
 
 
+class ServiceInactiveException(fastapi.HTTPException):
+    def __init__(self):
+        super().__init__(
+            status_code=fastapi.status.HTTP_400_BAD_REQUEST,
+            detail="Service is inactive",
+        )
+
+
 class InactiveServiceTypeException(fastapi.HTTPException):
     def __init__(self):
         super().__init__(
