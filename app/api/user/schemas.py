@@ -21,7 +21,7 @@ class RegistrationUserRequestSchemas(pydantic.BaseModel):
     @classmethod
     def validate_password_field(cls, value: str) -> str:
         return validators.validate_password(value)
-    
+
     @pydantic.field_validator("first_name")
     @classmethod
     def validate_first_name(cls, value: str) -> str:

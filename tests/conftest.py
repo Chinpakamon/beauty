@@ -9,7 +9,8 @@ from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from app.api.user.router import router
+from app.api.service_type.router import router as service_type_router
+from app.api.user.router import router as user_router
 from app.core.database.core import Base, get_session
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -54,7 +55,8 @@ async def test_session() -> AsyncSession:
 @pytest_asyncio.fixture
 def test_app(test_session: AsyncSession) -> FastAPI:
     app = FastAPI()
-    app.include_router(router)
+    app.include_router(user_router)
+    app.include_router(service_type_router)
 
     async def override_session():
         yield test_session
