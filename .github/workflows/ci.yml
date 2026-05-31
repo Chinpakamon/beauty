@@ -31,3 +31,13 @@ jobs:
 
       - name: Run tests
         run: poetry run pytest
+        
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          ADMIN_PHONE_NUMBER: ${{ secrets.ADMIN_PHONE_NUMBER }}
+          ADMIN_FIRST_NAME: ${{ secrets.ADMIN_FIRST_NAME }}
+          ADMIN_LAST_NAME: ${{ secrets.ADMIN_LAST_NAME }}
