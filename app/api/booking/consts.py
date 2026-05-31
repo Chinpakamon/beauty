@@ -1,0 +1,8 @@
+import enum
+
+
+class BookingOrderByType(enum.StrEnum):
+    CREATED_AT_ASC = "CREATED_AT_ASC"
+    CREATED_AT_DESC = "CREATED_AT_DESC"
+    START_TIME_ASC = "START_TIME_ASC"
+    START_TIME_DESC = "START_TIME_DESC"

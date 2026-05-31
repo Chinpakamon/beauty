@@ -12,6 +12,7 @@ class BookingStatus(enum.Enum):
     PENDING = "PENDING"
     CONFIRMED = "CONFIRMED"
     CANCELLED = "CANCELLED"
+    REJECTED = "REJECTED"
     COMPLETED = "COMPLETED"
 
 
@@ -26,6 +27,10 @@ class Booking(database.Base, mixins.PrimaryKeyMixin, mixins.TimestampMixin):
     )
     master_id: orm.Mapped[int] = orm.mapped_column(
         sqlalchemy.ForeignKey("users.id"), nullable=False
+    )
+    availability_slot_id: orm.Mapped[int] = orm.mapped_column(
+        sqlalchemy.ForeignKey("master_availability_slots.id"),
+        nullable=False,
     )
     start_time: orm.Mapped[datetime.datetime] = orm.mapped_column(
         sqlalchemy.DateTime, nullable=False
@@ -43,6 +48,9 @@ class Booking(database.Base, mixins.PrimaryKeyMixin, mixins.TimestampMixin):
     )
     service: orm.Mapped["Service"] = orm.relationship(back_populates="bookings")
     master: orm.Mapped["User"] = orm.relationship(foreign_keys=[master_id])
+    availability_slot: orm.Mapped["MasterAvailabilitySlot"] = orm.relationship(
+        back_populates="booking"
+    )
     review: orm.Mapped["Review"] = orm.relationship(
         back_populates="booking", uselist=False
     )

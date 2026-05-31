@@ -30,11 +30,12 @@ class User(database.Base, mixins.PrimaryKeyMixin, mixins.TimestampMixin):
     phone_number: orm.Mapped[str] = orm.mapped_column(sqlalchemy.String, nullable=False)
     is_active: orm.Mapped[bool] = orm.mapped_column(sqlalchemy.Boolean, default=True)
 
-    # relationships
     services: orm.Mapped[list["Service"]] = orm.relationship(
         back_populates="master", cascade="all, delete-orphan"
     )
-
     bookings: orm.Mapped[list["Booking"]] = orm.relationship(
         back_populates="user", foreign_keys="Booking.user_id"
+    )
+    availability_slots: orm.Mapped[list["MasterAvailabilitySlot"]] = orm.relationship(
+        back_populates="master", cascade="all, delete-orphan"
     )
