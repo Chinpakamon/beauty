@@ -11,6 +11,7 @@ from app.api.user.router import router as user_router
 from app.core.database.core import SessionLocal, engine
 from app.core.middleware.auth_middleware import AuthMiddleware
 from app.core.seeds.admin import create_dev_admin
+from app.frontend import setup_frontend
 
 
 @asynccontextmanager
@@ -39,7 +40,8 @@ def create_app() -> FastAPI:
     )
 
     app.add_middleware(AuthMiddleware)
-
+    
+    setup_frontend(app)
     app.include_router(user_router)
     app.include_router(service_type_router)
     app.include_router(service_router)

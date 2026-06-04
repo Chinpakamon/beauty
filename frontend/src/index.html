@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>По красоте — запись к мастеру</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="logo" href="/frontend/" aria-label="Beauty home">
+          <span class="logo__mark">П</span>
+          <span>По красоте</span>
+        </a>
+        <nav class="site-nav" aria-label="Главная навигация">
+          <a href="#services">Услуги</a>
+          <a href="#benefits">Почему мы</a>
+          <a href="#auth">Войти</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero__content">
+            <h1 id="hero-title">Нежный сервис для простой записи к мастеру</h1>
+            <div class="hero__actions">
+              <a class="button button--primary" href="#auth">Начать</a>
+            </div>
+          </div>
+          <div class="hero-card" aria-label="Карточка записи">
+            <span class="hero-card__badge">Сегодня</span>
+            <h2>Маникюр + уход</h2>
+            <p>19:30 · мастер Анна · кабинет Rose</p>
+            <div class="hero-card__progress"><span></span></div>
+            <small>Осталось подтвердить профиль клиента</small>
+          </div>
+        </section>
+
+        <section id="services" class="section">
+          <div class="section__heading">
+            <p class="eyebrow">Services</p>
+            <h2>Услуги</h2>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card">
+              <span>01</span>
+              <h3>Каталог услуг</h3>
+              <p>Изучайте услуги, цены и работы мастеров в одном месте, чтобы быстро найти подходящий вариант.</p>
+            </article>
+            <article class="feature-card">
+              <span>02</span>
+              <h3>Свободные слоты</h3>
+              <p>Смотрите актуальное расписание мастеров в реальном времени и записывайтесь на удобное время без ожидания ответа.</p>
+            </article>
+            <article class="feature-card">
+              <span>03</span>
+              <h3>Личный кабинет</h3>
+              <p>Управляйте своими записями, отслеживайте историю посещений и получайте всю важную информацию в одном месте.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="benefits" class="section split-section">
+          <div>
+            <h2>Почему именно мы</h2>
+          </div>
+          <ul class="benefit-list">
+            <li>Записывайтесь к любимым мастерам за пару кликов — без звонков, ожидания ответа и лишней суеты.</li>
+            <li>Больше не нужно искать мастера в соцсетях и уточнять расписание — вся информация доступна сразу.</li>
+            <li>Мы делаем запись на beauty-услуги такой же простой, как заказ такси или доставка еды.</li>
+          </ul>
+        </section>
+
+        <section id="auth" class="auth-section" aria-labelledby="auth-title">
+          <div class="auth-copy">
+            <h2 id="auth-title">Вход и регистрация</h2>
+          </div>
+          <div id="auth-app" class="auth-panel"></div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

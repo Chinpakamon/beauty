@@ -14,6 +14,7 @@ from app.api.service.router import router as service_router
 from app.api.service_type.router import router as service_type_router
 from app.api.user.router import router as user_router
 from app.core.database.core import Base, get_session
+from app.frontend import setup_frontend
 
 ROOT = Path(__file__).resolve().parents[1]
 MOCKS_DIR = Path(__file__).resolve().parent / "mocks" / "user"
@@ -46,6 +47,7 @@ async def test_session() -> AsyncSession:
 @pytest_asyncio.fixture
 def test_app(test_session: AsyncSession) -> FastAPI:
     app = FastAPI()
+    setup_frontend(app)
     app.include_router(user_router)
     app.include_router(service_type_router)
     app.include_router(service_router)

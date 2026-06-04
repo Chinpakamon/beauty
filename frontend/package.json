@@ -1,0 +1,10 @@
+{
+  "name": "beauty-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Frontend for Beauty API",
+  "scripts": {
+    "build": "node ./scripts/build.mjs"
+  },
+  "devDependencies": {}
+}
