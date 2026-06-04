@@ -30,9 +30,7 @@ class ReviewRepository:
         session: AsyncSession,
     ) -> sqlalchemy.RowMapping | None:
         query = (
-            sqlalchemy.insert(models.Review)
-            .values(**data)
-            .returning(*REVIEW_COLUMNS)
+            sqlalchemy.insert(models.Review).values(**data).returning(*REVIEW_COLUMNS)
         )
 
         try:

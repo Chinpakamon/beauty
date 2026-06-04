@@ -57,9 +57,7 @@ class ListReviewsFilters(pydantic.BaseModel):
 
 class ListReviewsRequestSchemas(pydantic.BaseModel):
     filters: ListReviewsFilters | None = None
-    order_by: consts.ReviewOrderByType | None = (
-        consts.ReviewOrderByType.CREATED_AT_DESC
-    )
+    order_by: consts.ReviewOrderByType | None = consts.ReviewOrderByType.CREATED_AT_DESC
     limit: int = pydantic.Field(default=10, ge=1, le=100)
     offset: int = pydantic.Field(default=0, ge=0)
 
