@@ -9,6 +9,7 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.api.booking.router import router as booking_router
+from app.api.review.router import router as review_router
 from app.api.service.router import router as service_router
 from app.api.service_type.router import router as service_type_router
 from app.api.user.router import router as user_router
@@ -49,6 +50,7 @@ def test_app(test_session: AsyncSession) -> FastAPI:
     app.include_router(service_type_router)
     app.include_router(service_router)
     app.include_router(booking_router)
+    app.include_router(review_router)
 
     async def override_session():
         yield test_session

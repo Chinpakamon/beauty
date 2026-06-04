@@ -1,0 +1,8 @@
+import enum
+
+
+class ReviewOrderByType(enum.StrEnum):
+    CREATED_AT_ASC = "CREATED_AT_ASC"
+    CREATED_AT_DESC = "CREATED_AT_DESC"
+    RATING_ASC = "RATING_ASC"
+    RATING_DESC = "RATING_DESC"

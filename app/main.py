@@ -4,6 +4,7 @@ from fastapi import FastAPI, status
 from sqlalchemy import text
 
 from app.api.booking.router import router as booking_router
+from app.api.review.router import router as review_router
 from app.api.service.router import router as service_router
 from app.api.service_type.router import router as service_type_router
 from app.api.user.router import router as user_router
@@ -43,6 +44,7 @@ def create_app() -> FastAPI:
     app.include_router(service_type_router)
     app.include_router(service_router)
     app.include_router(booking_router)
+    app.include_router(review_router)
 
     @app.get(
         "/health",
