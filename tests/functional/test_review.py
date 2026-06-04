@@ -8,7 +8,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import models
 from app.core.database.models.user import RoleType
-from app.core.middleware import dependencies
 from tests.functional.test_booking import authorize
 from tests.functional.test_service import (
     create_service,
@@ -231,7 +230,51 @@ async def test_get_list_update_and_admin_delete_review(
     assert update_body["rating"] == 5, update_body
     assert update_body["text"] == "Perfect", update_body
 
-    test_app.dependency_overrides[dependencies.require_admin] = lambda: admin
+    await authorize(test_app, admin)
+    delete_response = await test_client.delete(f"/review/{review_id}")
+    assert delete_response.status_code == 200, delete_response.json()
+    assert delete_response.json()["detail"] == "Review deleted"
+
+    review = await test_session.scalar(
+        select(models.Review).where(models.Review.id == review_id)
+    )
+    assert review is None
+
+
+@pytest.mark.asyncio
+async def test_review_owner_can_delete_own_review_and_stranger_cannot(
+    test_client: AsyncClient,
+    test_app: FastAPI,
+    test_session: AsyncSession,
+):
+    user, _, _, booking_id = await create_booking_for_review(
+        test_client,
+        test_app,
+        test_session,
+        slot_days=5,
+    )
+    stranger = await create_user(
+        test_session,
+        email="review-delete-stranger@example.com",
+        role=RoleType.USER,
+    )
+
+    await authorize(test_app, user)
+    create_response = await test_client.post(
+        "/review/create",
+        json={"booking_id": booking_id, "rating": 5, "text": "Delete me"},
+    )
+    create_body = create_response.json()
+    assert create_response.status_code == 200, create_body
+    review_id = create_body["id"]
+
+    await authorize(test_app, stranger)
+    forbidden_delete_response = await test_client.delete(f"/review/{review_id}")
+    assert (
+        forbidden_delete_response.status_code == 403
+    ), forbidden_delete_response.json()
+
+    await authorize(test_app, user)
     delete_response = await test_client.delete(f"/review/{review_id}")
     assert delete_response.status_code == 200, delete_response.json()
     assert delete_response.json()["detail"] == "Review deleted"

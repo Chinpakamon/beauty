@@ -31,6 +31,18 @@ class ReviewService:
         raise user_exceptions.PermissionDeniedException()
 
     @staticmethod
+    def _ensure_review_owner_or_admin(
+        current_user: models.User,
+        review: models.Review,
+    ) -> None:
+        if (
+            current_user.id == review.user_id
+            or current_user.role == models.RoleType.ADMIN
+        ):
+            return
+        raise user_exceptions.PermissionDeniedException()
+
+    @staticmethod
     async def create_review(
         data: schemas.CreateReviewRequestSchemas,
         current_user: models.User,
@@ -106,11 +118,16 @@ class ReviewService:
     @staticmethod
     async def delete_review(
         review_id: int,
+        current_user: models.User,
         session: AsyncSession,
     ) -> schemas.DeleteReviewResponseSchemas:
         review = await ReviewService._get_review_or_raise(
             review_id=review_id,
             session=session,
+        )
+        ReviewService._ensure_review_owner_or_admin(
+            current_user=current_user,
+            review=review,
         )
         await repository.ReviewRepository.delete_review(
             review_id=review.id,

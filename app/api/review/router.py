@@ -61,9 +61,10 @@ async def update_review(
 async def delete_review(
     review_id: int,
     session: AsyncSession = Depends(get_session),
-    current_user=Depends(dependencies.require_admin),
+    current_user=Depends(dependencies.get_current_user_dep),
 ):
     return await service.ReviewService.delete_review(
         review_id=review_id,
+        current_user=current_user,
         session=session,
     )
