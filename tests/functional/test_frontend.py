@@ -9,7 +9,9 @@ async def test_frontend_index_contains_application_mount(test_client: AsyncClien
     assert response.status_code == 200
     assert "text/html" in response.headers["content-type"]
     assert 'id="app-root"' in response.text
-    assert 'type="module" src="./app.js"' in response.text
+    assert 'href="/frontend/styles.css"' in response.text
+    assert 'type="module" src="/frontend/app.js"' in response.text
+    assert "Главная навигация" not in response.text
 
 
 @pytest.mark.asyncio

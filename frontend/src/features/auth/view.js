@@ -51,7 +51,7 @@ const authFormTemplate = (state) => {
   const modeFields = AUTH_FIELDS[state.authMode];
   const nameFields = modeFields.filter((field) => field.row === 'name');
   const restFields = modeFields.filter((field) => field.row !== 'name');
-  const submitLabel = state.authMode === 'login' ? 'Войти в профиль' : 'Создать профиль';
+  const submitLabel = state.authMode === 'login' ? 'Продолжить' : 'Создать аккаунт';
 
   return `
     <form class="auth-form" data-auth-form="${state.authMode}">
@@ -71,16 +71,24 @@ export const renderAuthPage = (state) => `
   <section class="auth-landing" aria-labelledby="auth-title">
     <div class="auth-copy">
       <p class="eyebrow">Beauty workspace</p>
-      <h1 id="auth-title">Начните с входа или регистрации</h1>
+      <h1 id="auth-title">Добро пожаловать в «По красоте»</h1>
       <p>
-        Это базовая страница приложения: после успешной аутентификации мы сразу
-        откроем личный профиль, а остальные frontend-разделы можно подключать
-        отдельными модулями.
+        Выберите удобный сценарий: войдите в существующий аккаунт или создайте
+        новый профиль клиента/мастера. После успешного выполнения приложение
+        автоматически откроет личный кабинет.
       </p>
+      <div class="auth-cta" aria-label="Быстрый выбор действия">
+        <button class="button button--primary" data-auth-mode="registration" type="button">
+          Зарегистрироваться
+        </button>
+        <button class="button button--secondary" data-auth-mode="login" type="button">
+          Войти
+        </button>
+      </div>
       <div class="flow-steps" aria-label="Путь пользователя">
-        <span>1 · Авторизация</span>
-        <span>2 · Профиль</span>
-        <span>3 · Записи и услуги</span>
+      </div>
+      <div class="beauty-preview" aria-hidden="true">
+        <span class="beauty-preview__glow"></span>
       </div>
     </div>
     <div id="auth-app" class="auth-panel">
