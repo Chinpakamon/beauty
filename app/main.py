@@ -40,7 +40,7 @@ def create_app() -> FastAPI:
     )
 
     app.add_middleware(AuthMiddleware)
-    
+
     setup_frontend(app)
     app.include_router(user_router)
     app.include_router(service_type_router)
