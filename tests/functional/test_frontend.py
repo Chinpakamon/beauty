@@ -22,6 +22,7 @@ async def test_frontend_serves_vanilla_js_entrypoint(test_client: AsyncClient):
     assert "renderAuthPage" in response.text
     assert "renderProfilePage" in response.text
     assert "showProfile" in response.text
+    assert "showPrivateView" in response.text
 
 
 @pytest.mark.asyncio
@@ -40,14 +41,15 @@ async def test_frontend_serves_profile_feature_module(test_client: AsyncClient):
 
     assert response.status_code == 200
     assert "'/user/me'" in response.text
+    assert "/user/update/" in response.text
+    assert "updateProfile" in response.text
 
 
 @pytest.mark.asyncio
-async def test_auth_path_redirects_to_frontend_auth_section(test_client: AsyncClient):
+async def test_auth_path_removed_from_frontend_routes(test_client: AsyncClient):
     response = await test_client.get("/auth", follow_redirects=False)
 
-    assert response.status_code == 307
-    assert response.headers["location"] == "/frontend/#auth"
+    assert response.status_code == 404
 
 
 @pytest.mark.asyncio

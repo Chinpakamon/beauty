@@ -69,15 +69,15 @@ def assert_validation_error_response(
 ) -> None:
     body = response.json()
     assert response.status_code == expected_status, body
-    assert isinstance(
-        body.get("detail"), list
-    ), f"Validation response must contain list detail. Body: {body}"
+    assert isinstance(body.get("detail"), list), (
+        f"Validation response must contain list detail. Body: {body}"
+    )
     assert body["detail"], f"Validation detail list must not be empty. Body: {body}"
 
     if expected_field:
-        assert any(
-            expected_field in item.get("loc", []) for item in body["detail"]
-        ), f"Expected validation error for field '{expected_field}'. Body: {body}"
+        assert any(expected_field in item.get("loc", []) for item in body["detail"]), (
+            f"Expected validation error for field '{expected_field}'. Body: {body}"
+        )
 
 
 @pytest.mark.asyncio
@@ -116,12 +116,13 @@ async def test_registration_invalid_email(test_client: AsyncClient):
     expected_error = load_mock("responses", "registration_status_422.json")
     body = response.json()
     assert response.status_code == expected_error["status_code"], body
-    assert (
-        "detail" in body
-    ), f"Invalid email: expected validation details in body: {body}"
-    assert any(
-        item.get("loc") for item in body["detail"]
-    ), f"Invalid email: validation error payload must include field locations. Body: {body}"  # noqa: E501
+    assert "detail" in body, (
+        f"Invalid email: expected validation details in body: {body}"
+    )
+    assert any(item.get("loc") for item in body["detail"]), (
+        "Invalid email: validation error payload must include field locations. "
+        f"Body: {body}"
+    )
 
 
 @pytest.mark.asyncio

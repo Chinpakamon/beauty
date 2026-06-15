@@ -414,3 +414,92 @@ h1 {
     flex-direction: column;
   }
 }
+
+.profile-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.profile-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid rgba(169, 47, 116, 0.14);
+  border-radius: 24px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: 0 14px 30px rgba(84, 35, 63, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-shortcut:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 38px rgba(84, 35, 63, 0.12);
+}
+
+.profile-shortcut__icon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border-radius: 18px;
+  background: var(--rose-100);
+  font-size: 1.6rem;
+}
+
+.profile-shortcut strong,
+.profile-shortcut small {
+  display: block;
+}
+
+.profile-shortcut small,
+.directory-card p,
+.directory-hero p {
+  color: var(--plum-600);
+  line-height: 1.5;
+}
+
+.profile-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 28px;
+  border-top: 1px solid rgba(169, 47, 116, 0.12);
+  padding-top: 24px;
+}
+
+.profile-form h2,
+.directory-card h2 {
+  margin-bottom: 0;
+}
+
+.directory-page {
+  display: grid;
+  gap: 28px;
+  padding: 48px 0 72px;
+}
+
+.directory-hero h1 {
+  max-width: 720px;
+}
+
+.directory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.directory-card {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+@media (max-width: 860px) {
+  .directory-grid,
+  .profile-shortcuts {
+    grid-template-columns: 1fr;
+  }
+}

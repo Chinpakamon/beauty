@@ -27,10 +27,6 @@ def setup_frontend(app: FastAPI) -> None:
     async def index() -> FileResponse:
         return FileResponse(frontend_directory / "index.html")
 
-    @app.get("/auth", include_in_schema=False)
-    async def auth() -> RedirectResponse:
-        return RedirectResponse(url="/frontend/#auth")
-
     @app.get("/profile", include_in_schema=False)
     async def profile() -> RedirectResponse:
         return RedirectResponse(url="/frontend/#profile")
