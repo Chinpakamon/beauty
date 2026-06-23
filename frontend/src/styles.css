@@ -118,6 +118,11 @@ h1 {
   line-height: 1.7;
 }
 
+.auth-copy__note {
+  max-width: 520px;
+  margin-top: 18px;
+}
+
 .auth-landing,
 .profile-page {
   display: grid;
@@ -133,7 +138,6 @@ h1 {
   max-width: 620px;
 }
 
-.flow-steps,
 .profile-actions {
   display: flex;
   flex-wrap: wrap;
@@ -141,14 +145,6 @@ h1 {
   margin-top: 28px;
 }
 
-.flow-steps span {
-  border: 1px solid rgba(169, 47, 116, 0.16);
-  border-radius: 999px;
-  padding: 10px 14px;
-  color: var(--rose-700);
-  background: rgba(255, 255, 255, 0.7);
-  font-weight: 900;
-}
 
 .button {
   display: inline-flex;
@@ -176,8 +172,7 @@ h1 {
 
 .app-loading,
 .auth-panel,
-.profile-card,
-.beauty-preview {
+.profile-card {
   border: 1px solid rgba(169, 47, 116, 0.12);
   background: rgba(255, 255, 255, 0.78);
   box-shadow: var(--shadow);
@@ -193,56 +188,6 @@ h1 {
   text-align: center;
 }
 
-.beauty-preview {
-  position: relative;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 16px;
-  align-items: center;
-  width: min(440px, 100%);
-  margin-top: 30px;
-  border-radius: 28px;
-  padding: 18px;
-  overflow: hidden;
-}
-
-.beauty-preview::after {
-  content: "";
-  position: absolute;
-  inset: auto -24px -48px auto;
-  width: 160px;
-  height: 160px;
-  border-radius: 999px;
-  background: rgba(217, 93, 159, 0.16);
-}
-
-.beauty-preview__glow {
-  display: block;
-  width: 58px;
-  height: 58px;
-  border-radius: 20px;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.62), transparent),
-    linear-gradient(135deg, var(--rose-500), var(--rose-700));
-  box-shadow: 0 16px 34px rgba(217, 93, 159, 0.32);
-}
-
-.beauty-preview strong,
-.beauty-preview small {
-  position: relative;
-  z-index: 1;
-  display: block;
-}
-
-.beauty-preview strong {
-  margin-bottom: 5px;
-  font-size: 1rem;
-}
-
-.beauty-preview small {
-  color: var(--plum-600);
-  line-height: 1.5;
-}
 
 .auth-panel {
   border-radius: 32px;

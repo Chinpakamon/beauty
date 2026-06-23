@@ -77,19 +77,10 @@ export const renderAuthPage = (state) => `
         новый профиль клиента/мастера. После успешного выполнения приложение
         автоматически откроет личный кабинет.
       </p>
-      <div class="auth-cta" aria-label="Быстрый выбор действия">
-        <button class="button button--primary" data-auth-mode="registration" type="button">
-          Зарегистрироваться
-        </button>
-        <button class="button button--secondary" data-auth-mode="login" type="button">
-          Войти
-        </button>
-      </div>
-      <div class="flow-steps" aria-label="Путь пользователя">
-      </div>
-      <div class="beauty-preview" aria-hidden="true">
-        <span class="beauty-preview__glow"></span>
-      </div>
+      <p class="auth-copy__note">
+        Используйте форму справа: переключитесь между входом и регистрацией,
+        заполните данные и продолжите работу в личном кабинете.
+      </p>
     </div>
     <div id="auth-app" class="auth-panel">
       ${authTabsTemplate(state.authMode)}
