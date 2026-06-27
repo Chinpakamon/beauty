@@ -9,10 +9,22 @@ FRONTEND_DIST = FRONTEND_ROOT / "dist"
 FRONTEND_SRC = FRONTEND_ROOT / "src"
 
 
+def get_latest_mtime(path: Path) -> float:
+    return max(
+        (item.stat().st_mtime for item in path.rglob("*") if item.is_file()),
+        default=0,
+    )
+
+
 def get_frontend_directory() -> Path:
-    if FRONTEND_DIST.exists():
-        return FRONTEND_DIST
-    return FRONTEND_SRC
+    if not FRONTEND_DIST.exists():
+        return FRONTEND_SRC
+    if (
+        FRONTEND_SRC.exists()
+        and get_latest_mtime(FRONTEND_SRC) > get_latest_mtime(FRONTEND_DIST)
+    ):
+        return FRONTEND_SRC
+    return FRONTEND_DIST
 
 
 def setup_frontend(app: FastAPI) -> None:

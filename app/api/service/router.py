@@ -83,6 +83,7 @@ async def delete_service(
 
 
 @router.get("/list", response_model=schemas.ListServiceResponseSchemas)
+@router.post("/list", response_model=schemas.ListServiceResponseSchemas)
 async def service_list(
     data: schemas.ListServiceRequestSchemas = Body(),
     session: AsyncSession = Depends(get_session),

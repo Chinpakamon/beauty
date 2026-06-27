@@ -7,6 +7,10 @@
   --rose-700: #a92f74;
   --plum-900: #2d1b26;
   --plum-600: #6d5a65;
+  --mulberry-rgb: 112, 64, 92;
+  --mauve-rgb: 200, 162, 183;
+  --champagne-rgb: 244, 234, 223;
+  --sage-rgb: 216, 223, 207;
   --cream: #fffdf9;
   --white: #ffffff;
   --green: #166534;
@@ -28,7 +32,13 @@ body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
   color: var(--plum-900);
-  background: linear-gradient(135deg, #fff8fc 0%, var(--cream) 52%, #fff4f9 100%);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(var(--mulberry-rgb), 0.22) 0, transparent 34%),
+    radial-gradient(circle at 84% 12%, rgba(var(--mauve-rgb), 0.28) 0, transparent 30%),
+    radial-gradient(circle at 88% 78%, rgba(var(--sage-rgb), 0.42) 0, transparent 32%),
+    radial-gradient(circle at 24% 88%, rgba(var(--champagne-rgb), 0.72) 0, transparent 38%),
+    linear-gradient(135deg, #f8eef3 0%, #fffaf4 46%, #eee3ea 100%);
+  background-attachment: fixed;
 }
 
 button,
@@ -443,5 +453,123 @@ h1 {
   .directory-grid,
   .profile-shortcuts {
     grid-template-columns: 1fr;
+  }
+}
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+  padding: 36px 0 72px;
+}
+
+.profile-sidebar {
+  position: sticky;
+  top: 24px;
+  display: grid;
+  gap: 28px;
+}
+
+.profile-menu {
+  display: grid;
+  gap: 10px;
+}
+
+.profile-menu__link {
+  border-radius: 18px;
+  padding: 14px 16px;
+  color: var(--plum-600);
+  font-weight: 900;
+}
+
+.profile-menu__link.is-active,
+.profile-menu__link:hover {
+  color: var(--rose-700);
+  background: var(--rose-100);
+}
+
+.profile-content {
+  display: grid;
+  gap: 22px;
+  min-width: 0;
+}
+
+.profile-main-card,
+.directory-page {
+  align-content: start;
+}
+
+.profile-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  border-bottom: 1px solid rgba(169, 47, 116, 0.12);
+  padding-bottom: 24px;
+}
+
+.profile-card__header h1,
+.directory-hero h1 {
+  margin-bottom: 12px;
+  font-size: clamp(2rem, 4vw, 3.8rem);
+}
+
+.profile-actions--top {
+  flex: 0 0 auto;
+  margin-top: 0;
+}
+
+.profile-form input:disabled {
+  color: var(--plum-900);
+  background: rgba(253, 232, 243, 0.35);
+  cursor: not-allowed;
+}
+
+.directory-filters {
+  display: grid;
+  gap: 16px;
+}
+
+.directory-list {
+  display: grid;
+  gap: 14px;
+}
+
+.directory-row {
+  display: grid;
+  gap: 8px;
+}
+
+.directory-row h2,
+.directory-row p {
+  margin-bottom: 0;
+}
+
+.badge {
+  width: max-content;
+  border-radius: 999px;
+  padding: 6px 12px;
+  color: var(--rose-700);
+  background: var(--rose-100);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+@media (max-width: 860px) {
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-sidebar {
+    position: static;
+  }
+
+  .profile-card__header {
+    display: grid;
+  }
+
+  .profile-actions--top {
+    width: 100%;
   }
 }

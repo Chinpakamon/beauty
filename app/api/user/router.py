@@ -71,6 +71,7 @@ async def user_delete(
 
 
 @router.get("/list", response_model=schemas.ListUserResponseSchemas)
+@router.post("/list", response_model=schemas.ListUserResponseSchemas)
 async def user_list(
     data: schemas.ListUserRequestSchemas = Body(),
     session: AsyncSession = Depends(get_session),
